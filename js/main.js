@@ -6,12 +6,21 @@ function initLoader() {
   const loader = document.getElementById("loader");
   const fill = document.getElementById("loaderFill");
   const count = document.getElementById("loaderCount");
+  const loaderBrand = document.querySelector(".loader-brand");
   const state = { value: 0 };
+
+  // TheCube style - split loader into two curtains
+  const curtainLeft = document.createElement('div');
+  const curtainRight = document.createElement('div');
+  curtainLeft.className = 'loader-curtain loader-curtain-left';
+  curtainRight.className = 'loader-curtain loader-curtain-right';
+  loader.appendChild(curtainLeft);
+  loader.appendChild(curtainRight);
 
   gsap.to(state, {
     value: 100,
-    duration: 2.1,
-    ease: "power3.inOut",
+    duration: 2.4,
+    ease: "power2.inOut",
     onUpdate: () => {
       if (fill) fill.style.width = `${state.value}%`;
       if (count) count.textContent = `${Math.round(state.value)}%`;
@@ -20,32 +29,51 @@ function initLoader() {
       // Initialize the page animations immediately so they start running underneath the sweeping loader!
       initPage();
 
-      // TheCube style curtain sweep
-      gsap.to(loader, {
-        yPercent: -100,
-        duration: 1.6,
-        ease: "expo.inOut",
-        onComplete: () => {
-          if (loader) loader.remove();
-        }
-      });
+      // TheCube style dual curtain reveal
+      const revealTL = gsap.timeline();
+      
+      revealTL
+        .to(loaderBrand, {
+          scale: 0.9,
+          autoAlpha: 0,
+          duration: 0.6,
+          ease: "power2.in"
+        })
+        .to([curtainLeft, curtainRight], {
+          scaleX: 0,
+          duration: 1.4,
+          ease: "expo.inOut",
+          stagger: 0.08,
+          onComplete: () => {
+            if (loader) loader.remove();
+          }
+        }, "-=0.3");
     }
   });
 }
 
 function initLenis() {
   lenis = new Lenis({ 
-    lerp: 0.05, // Heavy buttery smooth feel 
+    lerp: 0.04, // TheCube ultra-smooth feel
     smoothWheel: true,
-    wheelMultiplier: 0.8
+    wheelMultiplier: 0.7,
+    touchMultiplier: 1.5,
+    infinite: false
   });
+  
   function raf(time) {
     lenis.raf(time);
     requestAnimationFrame(raf);
   }
   requestAnimationFrame(raf);
+  
   lenis.on("scroll", ScrollTrigger.update);
   gsap.ticker.lagSmoothing(0);
+  
+  // Sync ScrollTrigger with Lenis
+  gsap.ticker.add((time) => {
+    lenis.raf(time * 1000);
+  });
 }
 
 
@@ -196,103 +224,218 @@ function initHeroStage() {
 }
 
 // --- THE CUBE TEXT SPLITTING UTILITIES ---
-function splitTextIntoWords(selector) {
+function splitTextIntoChars(selector) {
   document.querySelectorAll(selector).forEach(el => {
+    if (el.dataset.split === 'done') return;
     const text = el.innerText;
-    const words = text.split(' ');
     el.innerHTML = '';
-    words.forEach(word => {
+    
+    text.split('').forEach(char => {
       const outer = document.createElement('span');
-      outer.style.display = 'inline-block';
-      outer.style.overflow = 'hidden';
-      outer.style.verticalAlign = 'top';
-      // keep space after word unless it's a punctuation issue, but simple space is fine
-      outer.style.marginRight = '0.25em'; 
+      outer.className = 'char-wrap';
       
       const inner = document.createElement('span');
-      inner.style.display = 'inline-block';
-      inner.style.transform = 'translateY(110%)';
-      inner.style.transformOrigin = 'bottom left';
-      inner.innerHTML = word;
-      inner.classList.add('split-inner');
+      inner.className = 'char-inner';
+      inner.innerHTML = char === ' ' ? '&nbsp;' : char;
       
       outer.appendChild(inner);
       el.appendChild(outer);
     });
+    el.dataset.split = 'done';
+  });
+}
+
+function splitTextIntoWords(selector) {
+  document.querySelectorAll(selector).forEach(el => {
+    if (el.dataset.split === 'done') return;
+    const text = el.innerText;
+    const words = text.split(' ');
+    el.innerHTML = '';
+    words.forEach((word, i) => {
+      const outer = document.createElement('span');
+      outer.className = 'word-wrap';
+      
+      const inner = document.createElement('span');
+      inner.className = 'split-inner';
+      inner.innerHTML = word;
+      
+      outer.appendChild(inner);
+      el.appendChild(outer);
+      
+      // Add space between words (except last)
+      if (i < words.length - 1) {
+        const space = document.createElement('span');
+        space.innerHTML = '&nbsp;';
+        el.appendChild(space);
+      }
+    });
+    el.dataset.split = 'done';
+  });
+}
+
+function splitTextIntoLines(selector) {
+  document.querySelectorAll(selector).forEach(el => {
+    if (el.dataset.split === 'done') return;
+    const text = el.innerText;
+    el.innerHTML = '';
+    
+    const outer = document.createElement('span');
+    outer.className = 'line-wrap';
+    
+    const inner = document.createElement('span');
+    inner.className = 'line-inner';
+    inner.innerHTML = text;
+    
+    outer.appendChild(inner);
+    el.appendChild(outer);
+    el.dataset.split = 'done';
   });
 }
 
 function initHero() {
-  // Prep text split for cinematic reveal
-  splitTextIntoWords(".hero-title, .hero .eyebrow, .hero-text");
+  // TheCube-style character-by-character split for dramatic effect
+  splitTextIntoChars(".hero-title");
+  splitTextIntoWords(".hero .eyebrow, .hero-text");
   
   const timeline = gsap.timeline({ defaults: { ease: "expo.out" } });
   
-  // The moment initPage is called, the loader is starting its 1.6s sweep.
-  // We want the hero timeline to slightly delay and then expand masterfully.
+  // TheCube signature: dramatic clip-path reveal with rotation
   timeline
     .fromTo(".hero-image-frame", 
-      { clipPath: "inset(25% 25% 25% 25% round 0px)", scale: 1.15, autoAlpha: 0.2 },
-      { clipPath: "inset(0% 0% 0% 0% round 0px)", scale: 1, autoAlpha: 1, duration: 2.2, ease: "expo.inOut" },
-      0.2 // Starts while loader curtain is pulling up
+      { 
+        clipPath: "polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%)", 
+        scale: 1.3, 
+        rotation: -5,
+        autoAlpha: 0.3 
+      },
+      { 
+        clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)", 
+        scale: 1, 
+        rotation: 0,
+        autoAlpha: 1, 
+        duration: 2.4, 
+        ease: "expo.inOut" 
+      },
+      0.3
     )
-    .from(".site-header", { y: -30, autoAlpha: 0, duration: 1.2 }, 1.2)
-    .to(".hero .eyebrow .split-inner", { y: 0, stagger: 0.04, duration: 1.2 }, 1.0)
-    .to(".hero-title .split-inner", { y: 0, stagger: 0.06, duration: 1.4 }, 1.2)
-    .to(".hero-text .split-inner", { y: 0, stagger: 0.03, duration: 1.2 }, 1.4)
-    .from(".hero-actions", { y: 30, autoAlpha: 0, duration: 1 }, 1.6)
-    .from(".floating-chip", { y: 40, autoAlpha: 0, stagger: 0.1, duration: 1.2 }, 1.6)
-    .from(".scroll-mark", { y: 20, autoAlpha: 0, duration: 1 }, 1.8);
+    .from(".site-header", { 
+      y: -60, 
+      autoAlpha: 0, 
+      duration: 1.4,
+      ease: "power4.out"
+    }, 1.0)
+    // TheCube style - chars reveal with stagger and rotation
+    .to(".hero .eyebrow .split-inner", { 
+      y: 0, 
+      rotation: 0,
+      stagger: 0.03, 
+      duration: 1.0 
+    }, 0.9)
+    .to(".hero-title .char-inner", { 
+      y: 0, 
+      rotation: 0,
+      stagger: 0.02, 
+      duration: 0.8,
+      ease: "power4.out"
+    }, 1.0)
+    .to(".hero-text .split-inner", { 
+      y: 0, 
+      stagger: 0.025, 
+      duration: 1.0 
+    }, 1.3)
+    .from(".hero-actions", { 
+      y: 50, 
+      autoAlpha: 0, 
+      duration: 1.2,
+      ease: "power3.out"
+    }, 1.5)
+    .from(".floating-chip", { 
+      scale: 0.8,
+      y: 60, 
+      autoAlpha: 0, 
+      stagger: 0.12, 
+      duration: 1.4,
+      ease: "back.out(1.2)"
+    }, 1.4)
+    .from(".scroll-mark", { 
+      y: 30, 
+      autoAlpha: 0, 
+      duration: 1.2 
+    }, 1.8);
 
-  // Image parallax — slow subtle zoom as you scroll away
+  // TheCube-style dramatic parallax with scale
   gsap.to(".hero-image-frame img", {
-    yPercent: 20,
+    yPercent: 25,
+    scale: 1.1,
     ease: "none",
     scrollTrigger: {
       trigger: ".hero",
       start: "top top",
       end: "bottom top",
-      scrub: 1.2
+      scrub: 0.8
     }
   });
 
-  // Copy moves up faster than image = parallax depth separation
+  // Hero copy parallax - TheCube style with rotation
   gsap.to(".hero-copy", {
-    y: -80,
+    y: -120,
+    rotation: -2,
     autoAlpha: 0,
     ease: "none",
     scrollTrigger: {
       trigger: ".hero",
       start: "top top",
-      end: "60% top",
-      scrub: 1
+      end: "50% top",
+      scrub: 0.6
     }
   });
 
-  // Gold city model — animate in with a rise from below
+  // Gold city model — TheCube style with scale and blur effect simulation
   const cityModel = document.querySelector(".hero-city-model");
   if (cityModel) {
     gsap.fromTo(cityModel,
-      { y: 80, opacity: 0 },
-      { y: 0, opacity: 1, duration: 2.2, ease: "expo.out", delay: 1.2 }
+      { y: 120, opacity: 0, scale: 0.9 },
+      { y: 0, opacity: 1, scale: 1, duration: 2.6, ease: "expo.out", delay: 1.0 }
     );
-    // Slow float upward on scroll (slower than bg = parallax depth)
+    
     gsap.to(cityModel, {
-      yPercent: -30,
+      yPercent: -40,
+      scale: 1.1,
       ease: "none",
       scrollTrigger: {
         trigger: ".hero",
         start: "top top",
         end: "bottom top",
-        scrub: 1.5
+        scrub: 1.2
       }
     });
   }
 
-  // Floating chips idle animation
-  gsap.to(".chip-top", { y: -8, duration: 3.2, repeat: -1, yoyo: true, ease: "sine.inOut" });
-  gsap.to(".chip-middle", { y: 10, duration: 3.8, repeat: -1, yoyo: true, ease: "sine.inOut" });
-  gsap.to(".chip-bottom", { y: -6, duration: 3, repeat: -1, yoyo: true, ease: "sine.inOut" });
+  // TheCube style - smooth floating with slight rotation
+  gsap.to(".chip-top", { 
+    y: -12, 
+    rotation: 3,
+    duration: 4, 
+    repeat: -1, 
+    yoyo: true, 
+    ease: "sine.inOut" 
+  });
+  gsap.to(".chip-middle", { 
+    y: 15, 
+    rotation: -2,
+    duration: 4.5, 
+    repeat: -1, 
+    yoyo: true, 
+    ease: "sine.inOut" 
+  });
+  gsap.to(".chip-bottom", { 
+    y: -10, 
+    rotation: 2,
+    duration: 3.8, 
+    repeat: -1, 
+    yoyo: true, 
+    ease: "sine.inOut" 
+  });
 }
 
 function initCinematicReveals() {
@@ -498,31 +641,57 @@ function initShowcaseRail() {
   const cards = gsap.utils.toArray(".rail-card");
   const totalShift = Math.max(0, track.scrollWidth - window.innerWidth + 120);
 
-  gsap.from(cards, {
-    y: 120,
-    scale: 0.94,
-    autoAlpha: 0,
-    stagger: 0.15,
-    duration: 1.1,
-    ease: "power3.out",
-    scrollTrigger: {
-      trigger: ".showcase-rail",
-      start: "top 78%",
-      once: true
-    }
+  // TheCube style - cards slide in from right with stagger and rotation
+  cards.forEach((card, i) => {
+    gsap.fromTo(card,
+      { 
+        x: 200 + (i * 50),
+        rotation: 8 - (i * 2),
+        scale: 0.85,
+        autoAlpha: 0 
+      },
+      { 
+        x: 0,
+        rotation: 0,
+        scale: 1,
+        autoAlpha: 1,
+        duration: 1.4,
+        delay: i * 0.15,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: ".showcase-rail",
+          start: "top 85%",
+          once: true
+        }
+      }
+    );
   });
 
   if (totalShift > 0) {
+    // TheCube style horizontal scroll with easing
     gsap.to(track, {
       x: -totalShift,
       ease: "none",
       scrollTrigger: {
         trigger: ".showcase-rail",
         start: "top top",
-        end: () => `+=${totalShift}`,
-        scrub: true,
+        end: () => `+=${totalShift * 1.5}`,
+        scrub: 0.8,
         pin: true,
-        anticipatePin: 1
+        anticipatePin: 1,
+        // TheCube style - scale cards slightly as they pass center
+        onUpdate: (self) => {
+          const progress = self.progress;
+          cards.forEach((card, i) => {
+            const cardProgress = (progress * cards.length) - i;
+            const scale = 1 - Math.abs(cardProgress - 0.5) * 0.08;
+            const rotation = (cardProgress - 0.5) * -3;
+            gsap.set(card, { 
+              scale: Math.max(0.92, Math.min(1.02, scale)),
+              rotation: rotation * 0.5
+            });
+          });
+        }
       }
     });
   }
@@ -579,6 +748,154 @@ function initForm() {
   });
 }
 
+// TheCube-style infinite marquee
+function initMarquee() {
+  const marquees = document.querySelectorAll('.marquee-track');
+  
+  marquees.forEach((track, index) => {
+    const items = track.querySelectorAll('.marquee-item');
+    if (!items.length) return;
+    
+    // Clone items for seamless loop
+    items.forEach(item => {
+      const clone = item.cloneNode(true);
+      track.appendChild(clone);
+    });
+    
+    const direction = index % 2 === 0 ? -1 : 1;
+    const duration = 25 + (index * 5);
+    
+    gsap.to(track, {
+      xPercent: direction * -50,
+      duration: duration,
+      ease: "none",
+      repeat: -1
+    });
+    
+    // Speed up on scroll
+    ScrollTrigger.create({
+      trigger: track.parentElement,
+      start: "top bottom",
+      end: "bottom top",
+      onUpdate: (self) => {
+        const velocity = Math.abs(self.getVelocity()) / 1000;
+        gsap.to(track, {
+          timeScale: 1 + velocity * 0.5,
+          duration: 0.3
+        });
+      }
+    });
+  });
+}
+
+// TheCube-style vertical timeline scrub
+function initTimelineScrub() {
+  const timeline = document.querySelector('.history-timeline');
+  if (!timeline) return;
+  
+  const items = gsap.utils.toArray('.history-item');
+  const numbers = gsap.utils.toArray('.history-number');
+  
+  items.forEach((item, i) => {
+    const number = numbers[i];
+    
+    ScrollTrigger.create({
+      trigger: item,
+      start: "top 60%",
+      end: "bottom 40%",
+      onEnter: () => {
+        gsap.to(item, { autoAlpha: 1, x: 0, duration: 0.8, ease: "power3.out" });
+        gsap.to(number, { scale: 1.2, color: "#a86d2b", duration: 0.4 });
+      },
+      onLeave: () => {
+        gsap.to(item, { autoAlpha: 0.3, duration: 0.4 });
+        gsap.to(number, { scale: 1, color: "rgba(255,255,255,0.3)", duration: 0.4 });
+      },
+      onEnterBack: () => {
+        gsap.to(item, { autoAlpha: 1, x: 0, duration: 0.8, ease: "power3.out" });
+        gsap.to(number, { scale: 1.2, color: "#a86d2b", duration: 0.4 });
+      },
+      onLeaveBack: () => {
+        gsap.to(item, { autoAlpha: 0.3, duration: 0.4 });
+        gsap.to(number, { scale: 1, color: "rgba(255,255,255,0.3)", duration: 0.4 });
+      }
+    });
+  });
+}
+
+// TheCube-style image reveal with mask
+function initImageMaskReveals() {
+  const images = document.querySelectorAll('[data-mask-reveal]');
+  
+  images.forEach(img => {
+    const direction = img.dataset.maskReveal || 'bottom';
+    let clipStart, clipEnd;
+    
+    switch(direction) {
+      case 'left':
+        clipStart = "inset(0 100% 0 0)";
+        clipEnd = "inset(0 0% 0 0)";
+        break;
+      case 'right':
+        clipStart = "inset(0 0 0 100%)";
+        clipEnd = "inset(0 0 0 0%)";
+        break;
+      case 'top':
+        clipStart = "inset(100% 0 0 0)";
+        clipEnd = "inset(0% 0 0 0)";
+        break;
+      default: // bottom
+        clipStart = "inset(0 0 100% 0)";
+        clipEnd = "inset(0 0 0% 0)";
+    }
+    
+    gsap.fromTo(img,
+      { clipPath: clipStart },
+      {
+        clipPath: clipEnd,
+        duration: 1.6,
+        ease: "expo.inOut",
+        scrollTrigger: {
+          trigger: img,
+          start: "top 80%",
+          once: true
+        }
+      }
+    );
+  });
+}
+
+// TheCube-style text scramble effect
+function initTextScramble() {
+  const scrambleElements = document.querySelectorAll('[data-scramble]');
+  const chars = "!<>-_\\/[]{}—=+*^?#_____";
+  
+  scrambleElements.forEach(el => {
+    const originalText = el.innerText;
+    
+    ScrollTrigger.create({
+      trigger: el,
+      start: "top 85%",
+      once: true,
+      onEnter: () => {
+        let iteration = 0;
+        const interval = setInterval(() => {
+          el.innerText = originalText
+            .split("")
+            .map((char, index) => {
+              if (index < iteration) return originalText[index];
+              return chars[Math.floor(Math.random() * chars.length)];
+            })
+            .join("");
+          
+          if (iteration >= originalText.length) clearInterval(interval);
+          iteration += 1/3;
+        }, 30);
+      }
+    });
+  });
+}
+
 function initPage() {
   initLenis();
   initCursor();
@@ -599,9 +916,54 @@ function initPage() {
   initMagnetic();
   initCardDepth();
   initForm();
+  initMarquee();
+  initTimelineScrub();
+  initImageMaskReveals();
+  initTextScramble();
+  initScrollVelocityEffects();
 
   window.addEventListener("load", () => ScrollTrigger.refresh());
   setTimeout(() => ScrollTrigger.refresh(), 800);
+}
+
+// TheCube-style scroll velocity effects
+function initScrollVelocityEffects() {
+  // Skew elements based on scroll velocity
+  const skewElements = document.querySelectorAll('.velocity-skew');
+  
+  skewElements.forEach(el => {
+    ScrollTrigger.create({
+      trigger: el,
+      start: "top bottom",
+      end: "bottom top",
+      onUpdate: (self) => {
+        const velocity = self.getVelocity() / 300;
+        gsap.to(el, {
+          skewY: Math.max(-5, Math.min(5, velocity)),
+          duration: 0.3
+        });
+      }
+    });
+  });
+  
+  // Scale images based on scroll position (TheCube parallax depth)
+  document.querySelectorAll('[data-parallax-scale]').forEach(el => {
+    const intensity = parseFloat(el.dataset.parallaxScale) || 0.1;
+    
+    gsap.fromTo(el,
+      { scale: 1 + intensity },
+      {
+        scale: 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger: el.parentElement,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true
+        }
+      }
+    );
+  });
 }
 
 initLoader();
