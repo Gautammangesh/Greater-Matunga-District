@@ -7,47 +7,82 @@ function initLoader() {
   const fill = document.getElementById("loaderFill");
   const count = document.getElementById("loaderCount");
   const loaderBrand = document.querySelector(".loader-brand");
+  const loaderTitle = document.querySelector(".loader-title");
+  const loaderKicker = document.querySelector(".loader-kicker");
   const state = { value: 0 };
 
-  // TheCube style - split loader into two curtains
-  const curtainLeft = document.createElement('div');
-  const curtainRight = document.createElement('div');
-  curtainLeft.className = 'loader-curtain loader-curtain-left';
-  curtainRight.className = 'loader-curtain loader-curtain-right';
-  loader.appendChild(curtainLeft);
-  loader.appendChild(curtainRight);
+  // TheCube exact style - single expanding curtain reveal from center
+  const curtain = document.createElement('div');
+  curtain.className = 'loader-curtain-cube';
+  loader.appendChild(curtain);
+
+  // TheCube style - text characters split and animate
+  if (loaderTitle) {
+    const text = loaderTitle.innerText;
+    loaderTitle.innerHTML = '';
+    text.split('').forEach((char, i) => {
+      const span = document.createElement('span');
+      span.className = 'loader-char';
+      span.innerHTML = char === ' ' ? '&nbsp;' : char;
+      span.style.transitionDelay = `${i * 0.02}s`;
+      loaderTitle.appendChild(span);
+    });
+  }
+
+  // Animate loader text in
+  gsap.fromTo(".loader-char", 
+    { y: 80, opacity: 0, rotationX: -90 },
+    { y: 0, opacity: 1, rotationX: 0, duration: 1.2, stagger: 0.02, ease: "power4.out", delay: 0.3 }
+  );
 
   gsap.to(state, {
     value: 100,
-    duration: 2.4,
+    duration: 2.8,
     ease: "power2.inOut",
     onUpdate: () => {
       if (fill) fill.style.width = `${state.value}%`;
       if (count) count.textContent = `${Math.round(state.value)}%`;
     },
     onComplete: () => {
-      // Initialize the page animations immediately so they start running underneath the sweeping loader!
       initPage();
 
-      // TheCube style dual curtain reveal
+      // TheCube exact reveal - curtain scales from center outward with clip-path
       const revealTL = gsap.timeline();
       
       revealTL
-        .to(loaderBrand, {
-          scale: 0.9,
-          autoAlpha: 0,
-          duration: 0.6,
+        // Fade out text with upward motion
+        .to(".loader-char", {
+          y: -40,
+          opacity: 0,
+          stagger: 0.01,
+          duration: 0.5,
           ease: "power2.in"
         })
-        .to([curtainLeft, curtainRight], {
-          scaleX: 0,
-          duration: 1.4,
-          ease: "expo.inOut",
-          stagger: 0.08,
+        .to(loaderKicker, {
+          y: -20,
+          opacity: 0,
+          duration: 0.4,
+          ease: "power2.in"
+        }, "<")
+        .to(count, {
+          y: -20,
+          opacity: 0,
+          duration: 0.4,
+          ease: "power2.in"
+        }, "<")
+        // TheCube signature - circular reveal expanding from center
+        .to(curtain, {
+          clipPath: "circle(0% at 50% 50%)",
+          duration: 1.6,
+          ease: "expo.inOut"
+        }, "-=0.2")
+        .to(loader, {
+          autoAlpha: 0,
+          duration: 0.3,
           onComplete: () => {
             if (loader) loader.remove();
           }
-        }, "-=0.3");
+        });
     }
   });
 }
@@ -904,6 +939,7 @@ function initPage() {
   initScrollProgress();
   initChapterNav();
   initHero();
+  initHeroStats();
   initCinematicReveals();
   initCinematicMediaMasks();
   initStoryPanels();
@@ -913,6 +949,7 @@ function initPage() {
   initChart();
   initLocation();
   initShowcaseRail();
+  initUseCaseCards();
   initMagnetic();
   initCardDepth();
   initForm();
@@ -921,6 +958,9 @@ function initPage() {
   initImageMaskReveals();
   initTextScramble();
   initScrollVelocityEffects();
+  initSpecsAccordion();
+  initHistorySection();
+  initPageEntrance();
 
   window.addEventListener("load", () => ScrollTrigger.refresh());
   setTimeout(() => ScrollTrigger.refresh(), 800);
@@ -964,6 +1004,294 @@ function initScrollVelocityEffects() {
       }
     );
   });
+}
+
+// TheCube exact - Hero stats with large numbers
+function initHeroStats() {
+  const statsSection = document.querySelector('.hero-stats');
+  if (!statsSection) return;
+  
+  const statItems = gsap.utils.toArray('.hero-stat');
+  
+  statItems.forEach((item, i) => {
+    const number = item.querySelector('.stat-number');
+    const label = item.querySelector('.stat-label');
+    const detail = item.querySelector('.stat-detail');
+    
+    // Staggered reveal
+    gsap.fromTo(item,
+      { y: 100, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 1.2,
+        delay: 0.8 + (i * 0.15),
+        ease: "power4.out"
+      }
+    );
+    
+    // Number counter animation
+    if (number) {
+      const target = parseInt(number.dataset.value) || 0;
+      const suffix = number.dataset.suffix || '';
+      const prefix = number.dataset.prefix || '';
+      const state = { val: 0 };
+      
+      gsap.to(state, {
+        val: target,
+        duration: 2,
+        delay: 1 + (i * 0.15),
+        ease: "power2.out",
+        onUpdate: () => {
+          number.textContent = prefix + Math.round(state.val).toLocaleString() + suffix;
+        }
+      });
+    }
+  });
+}
+
+// TheCube exact - Use case cards horizontal scroll with number indicators
+function initUseCaseCards() {
+  const section = document.querySelector('.usecase-section');
+  if (!section) return;
+  
+  const cards = gsap.utils.toArray('.usecase-card');
+  const numbers = gsap.utils.toArray('.usecase-number');
+  const track = document.querySelector('.usecase-track');
+  
+  if (!track || !cards.length) return;
+  
+  // Calculate total scroll distance
+  const totalWidth = track.scrollWidth - window.innerWidth + 200;
+  
+  // Pin and horizontal scroll
+  const scrollTween = gsap.to(track, {
+    x: -totalWidth,
+    ease: "none",
+    scrollTrigger: {
+      trigger: section,
+      start: "top top",
+      end: () => `+=${totalWidth}`,
+      scrub: 1,
+      pin: true,
+      anticipatePin: 1,
+      onUpdate: (self) => {
+        const progress = self.progress;
+        const activeIndex = Math.floor(progress * cards.length);
+        
+        // Update number indicators
+        numbers.forEach((num, i) => {
+          if (i === activeIndex) {
+            gsap.to(num, { scale: 1.5, color: "#a86d2b", duration: 0.3 });
+          } else {
+            gsap.to(num, { scale: 1, color: "rgba(255,255,255,0.3)", duration: 0.3 });
+          }
+        });
+        
+        // TheCube style - card transforms based on position
+        cards.forEach((card, i) => {
+          const cardProgress = (progress * cards.length) - i;
+          
+          // Scale and rotate based on distance from center
+          if (cardProgress >= -0.5 && cardProgress <= 1.5) {
+            const scale = 1 - Math.abs(cardProgress - 0.5) * 0.1;
+            const rotate = (cardProgress - 0.5) * -5;
+            const opacity = 1 - Math.abs(cardProgress - 0.5) * 0.3;
+            
+            gsap.to(card, {
+              scale: Math.max(0.85, Math.min(1.05, scale)),
+              rotation: rotate,
+              opacity: Math.max(0.5, opacity),
+              duration: 0.2
+            });
+          }
+        });
+      }
+    }
+  });
+  
+  // Initial card entrance animation
+  cards.forEach((card, i) => {
+    gsap.fromTo(card,
+      { x: 200, rotation: 15, opacity: 0 },
+      {
+        x: 0,
+        rotation: 0,
+        opacity: 1,
+        duration: 1.2,
+        delay: i * 0.1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: section,
+          start: "top 80%",
+          once: true
+        }
+      }
+    );
+  });
+}
+
+// TheCube exact - Specifications accordion
+function initSpecsAccordion() {
+  const items = document.querySelectorAll('.spec-item');
+  
+  items.forEach(item => {
+    const header = item.querySelector('.spec-header');
+    const content = item.querySelector('.spec-content');
+    const icon = item.querySelector('.spec-icon');
+    
+    if (!header || !content) return;
+    
+    // Set initial state
+    gsap.set(content, { height: 0, opacity: 0 });
+    
+    header.addEventListener('click', () => {
+      const isOpen = item.classList.contains('is-open');
+      
+      // Close all other items
+      items.forEach(other => {
+        if (other !== item && other.classList.contains('is-open')) {
+          other.classList.remove('is-open');
+          gsap.to(other.querySelector('.spec-content'), {
+            height: 0,
+            opacity: 0,
+            duration: 0.5,
+            ease: "power3.inOut"
+          });
+          gsap.to(other.querySelector('.spec-icon'), {
+            rotation: 0,
+            duration: 0.3
+          });
+        }
+      });
+      
+      // Toggle current item
+      if (isOpen) {
+        item.classList.remove('is-open');
+        gsap.to(content, {
+          height: 0,
+          opacity: 0,
+          duration: 0.5,
+          ease: "power3.inOut"
+        });
+        gsap.to(icon, { rotation: 0, duration: 0.3 });
+      } else {
+        item.classList.add('is-open');
+        gsap.to(content, {
+          height: "auto",
+          opacity: 1,
+          duration: 0.5,
+          ease: "power3.inOut"
+        });
+        gsap.to(icon, { rotation: 45, duration: 0.3 });
+      }
+    });
+  });
+}
+
+// TheCube exact - History timeline with vertical number rail
+function initHistorySection() {
+  const section = document.querySelector('.history-section');
+  if (!section) return;
+  
+  const items = gsap.utils.toArray('.history-item');
+  const numberRail = document.querySelector('.history-number-rail');
+  const numbers = gsap.utils.toArray('.history-number');
+  
+  if (!items.length) return;
+  
+  // Pin the number rail
+  if (numberRail) {
+    ScrollTrigger.create({
+      trigger: section,
+      start: "top top",
+      end: "bottom bottom",
+      pin: numberRail,
+      pinSpacing: false
+    });
+  }
+  
+  // Animate each history item
+  items.forEach((item, i) => {
+    const year = item.querySelector('.history-year');
+    const title = item.querySelector('.history-title');
+    const text = item.querySelector('.history-text');
+    const image = item.querySelector('.history-image');
+    
+    ScrollTrigger.create({
+      trigger: item,
+      start: "top 60%",
+      end: "bottom 40%",
+      onEnter: () => {
+        // Highlight corresponding number
+        numbers.forEach((num, j) => {
+          if (j === i) {
+            gsap.to(num, { 
+              scale: 1.4, 
+              color: "#a86d2b",
+              x: 20,
+              duration: 0.4,
+              ease: "power2.out"
+            });
+          } else {
+            gsap.to(num, { 
+              scale: 1, 
+              color: "rgba(255,255,255,0.25)",
+              x: 0,
+              duration: 0.4 
+            });
+          }
+        });
+        
+        // Animate content in
+        gsap.to(item, { opacity: 1, x: 0, duration: 0.8, ease: "power3.out" });
+        if (year) gsap.to(year, { opacity: 1, y: 0, duration: 0.6, delay: 0.1 });
+        if (title) gsap.to(title, { opacity: 1, y: 0, duration: 0.6, delay: 0.2 });
+        if (text) gsap.to(text, { opacity: 1, y: 0, duration: 0.6, delay: 0.3 });
+        if (image) gsap.to(image, { 
+          clipPath: "inset(0% 0% 0% 0%)", 
+          scale: 1,
+          duration: 1.2, 
+          ease: "power3.inOut" 
+        });
+      },
+      onLeave: () => {
+        gsap.to(item, { opacity: 0.3, duration: 0.4 });
+      },
+      onEnterBack: () => {
+        numbers.forEach((num, j) => {
+          if (j === i) {
+            gsap.to(num, { scale: 1.4, color: "#a86d2b", x: 20, duration: 0.4 });
+          } else {
+            gsap.to(num, { scale: 1, color: "rgba(255,255,255,0.25)", x: 0, duration: 0.4 });
+          }
+        });
+        gsap.to(item, { opacity: 1, x: 0, duration: 0.8, ease: "power3.out" });
+      },
+      onLeaveBack: () => {
+        gsap.to(item, { opacity: 0.3, duration: 0.4 });
+      }
+    });
+    
+    // Set initial states
+    gsap.set(item, { opacity: 0.3, x: 50 });
+    if (year) gsap.set(year, { opacity: 0, y: 20 });
+    if (title) gsap.set(title, { opacity: 0, y: 30 });
+    if (text) gsap.set(text, { opacity: 0, y: 20 });
+    if (image) gsap.set(image, { clipPath: "inset(0% 100% 0% 0%)", scale: 1.1 });
+  });
+}
+
+// TheCube exact - Smooth page entrance with staggered elements
+function initPageEntrance() {
+  // Add entrance class to body
+  document.body.classList.add('page-loaded');
+  
+  // Staggered entrance for all major elements
+  gsap.fromTo(".site-header",
+    { y: -100, opacity: 0 },
+    { y: 0, opacity: 1, duration: 1.2, delay: 0.2, ease: "power4.out" }
+  );
 }
 
 initLoader();
