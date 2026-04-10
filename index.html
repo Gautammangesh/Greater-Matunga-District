@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Greater Matunga District | The Time To Rise Is Now</title>
+  <meta
+    name="description"
+    content="Greater Matunga District is an animated luxury real-estate experience inspired by legacy, lifestyle, and the future of central Mumbai."
+  >
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+</head>
+<body>
+  <div class="noise-layer" aria-hidden="true"></div>
+  <div class="scroll-progress" aria-hidden="true">
+    <span id="scrollProgressBar"></span>
+  </div>
+
+  <div id="cursor-dot" aria-hidden="true"></div>
+  <div id="cursor-ring" aria-hidden="true"></div>
+
+  <div id="loader" aria-hidden="true">
+    <div class="loader-backdrop"></div>
+    <div class="loader-brand">
+      <img src="assets/images/crest-gold.png" alt="" class="loader-crest">
+      <p class="loader-kicker">Greater Matunga District</p>
+      <h1 class="loader-title">The Time To Rise Is Now</h1>
+      <div class="loader-line"><span id="loaderFill"></span></div>
+      <p class="loader-count" id="loaderCount">0%</p>
+    </div>
+  </div>
+
+  <header class="site-header" id="siteHeader">
+    <a href="#hero" class="brand">
+      <img src="assets/images/crest-gold.png" alt="Greater Matunga District crest">
+      <span>Greater Matunga District</span>
+    </a>
+
+    <nav class="main-nav" id="mainNav">
+      <a href="#story">Story</a>
+      <a href="#lifestyle">Lifestyle</a>
+      <a href="#highlights">Highlights</a>
+      <a href="#amenities">Amenities</a>
+      <a href="#location">Location</a>
+      <a href="#future">Future</a>
+    </nav>
+
+    <button class="header-cta magnetic" data-scroll="#cta">Book A Private Preview</button>
+
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+    </button>
+  </header>
+
+  <main>
+    <section class="hero" id="hero">
+      <div class="hero-visual">
+        <div class="hero-image-frame">
+          <img src="assets/images/hero-family-towers.jpg" alt="Greater Matunga District towers" class="img-hero-family" data-parallax="12">
+        </div>
+        <div class="hero-city-model" aria-hidden="true">
+          <img src="assets/images/gold-city-hero.png" alt="" class="hero-city-img">
+        </div>
+      </div>
+
+      <div class="hero-copy">
+        <p class="eyebrow reveal" data-reveal="up">Legacy-rooted. Future-facing. Central Mumbai.</p>
+        <h1 class="hero-title reveal" data-reveal="up">
+          Greater Matunga District
+          <span>The rise of a new urban landmark.</span>
+        </h1>
+        <p class="hero-text reveal" data-reveal="up">
+          A cinematic real-estate destination where heritage, lifestyle, and growth come together in one elevated address.
+        </p>
+        <div class="hero-actions reveal" data-reveal="up">
+          <button class="btn btn-solid" data-scroll="#story">Enter The District</button>
+          <button class="btn btn-outline" data-scroll="#location">Explore Connectivity</button>
+        </div>
+      </div>
+
+        <div class="floating-chip chip-top">Historically Rooted</div>
+        <div class="floating-chip chip-middle">Quiet Luxury</div>
+        <div class="floating-chip chip-bottom">The Time To Rise Is Now</div>
+
+      <button class="scroll-mark" data-scroll="#story">
+        <span>Scroll To Discover</span>
+      </button>
+    </section>
+
+    <section class="intro-spread" id="introSpread">
+      <div class="intro-brand-panel reveal" data-reveal="left">
+        <div class="intro-brand-shell">
+          <img src="assets/images/crest-gold.png" alt="Greater Matunga District crest" class="intro-crest">
+          <p class="eyebrow">The New Centre</p>
+          <h2>Greater Matunga District</h2>
+          <p>
+            This is not a project page with images placed on top. It is a district narrative translated into an immersive web experience.
+          </p>
+        </div>
+      </div>
+
+      <div class="intro-visual-panel reveal" data-reveal="right">
+        <div class="intro-image-stack">
+          <figure class="intro-card intro-card-main">
+            <img src="assets/images/matunga-aerial.jpg" alt="Aerial image of Matunga and central Mumbai" class="img-aerial-main">
+          </figure>
+          <figure class="intro-card intro-card-top">
+            <img src="assets/images/temple.jpg" alt="Cultural landmark in Matunga" class="img-temple">
+          </figure>
+          <figure class="intro-card intro-card-bottom">
+            <img src="assets/images/school-life.jpg" alt="Students and institutional life near the district" class="img-school">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="story-section" id="story">
+      <div class="section-heading wide reveal" data-reveal="up">
+        <p class="eyebrow">A Storytelling District</p>
+        <h2>Built like a cinematic journey, not a brochure.</h2>
+      </div>
+
+      <div class="story-shell">
+        <div class="story-stage" id="storyStage">
+          <article class="story-panel is-active">
+            <div class="story-media">
+              <img src="assets/images/matunga-aerial.jpg" alt="Aerial city view of the Matunga district" class="img-aerial-main" data-parallax="10">
+            </div>
+            <div class="story-copy">
+              <p class="panel-index">01</p>
+              <h3>The heritage heartland of Mumbai</h3>
+              <p>
+                Matunga carries a rare emotional weight: culture, institutions, quiet residential dignity, and a memory of old Mumbai that still feels alive.
+              </p>
+            </div>
+          </article>
+
+          <article class="story-panel">
+            <div class="story-media">
+              <img src="assets/images/temple.jpg" alt="Local heritage landmark in Matunga" class="img-temple" data-parallax="14">
+            </div>
+            <div class="story-copy">
+              <p class="panel-index">02</p>
+              <h3>Greater is not just a name, it is a transformation</h3>
+              <p>
+                The district expands the soul of Matunga into a larger ambition: better planning, stronger lifestyle infrastructure, and a more complete mixed-use future.
+              </p>
+            </div>
+          </article>
+
+          <article class="story-panel">
+            <div class="story-media">
+              <img src="assets/images/view-window.jpg" alt="Residents looking over a premium city skyline view" class="img-view-window" data-parallax="16">
+            </div>
+            <div class="story-copy">
+              <p class="panel-index">03</p>
+              <h3>Real rise begins here</h3>
+              <p>
+                This is where value, lifestyle, and centrality align. Not loud luxury. Considered luxury, designed to feel inevitable.
+              </p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="metrics-section">
+      <div class="section-sweep" aria-hidden="true"></div>
+      <div class="section-heading reveal" data-reveal="up">
+        <p class="eyebrow">The Rise</p>
+        <h2>A micro-market gaining momentum.</h2>
+      </div>
+
+      <div class="metrics-grid">
+        <article class="metric-card reveal" data-reveal="up" data-counter="7800" data-suffix="+">
+          <p class="metric-value">0</p>
+          <h3>Total Homes</h3>
+          <p>Residential momentum between 2021 and 2025.</p>
+        </article>
+        <article class="metric-card reveal" data-reveal="up" data-counter="37" data-suffix="%">
+          <p class="metric-value">0</p>
+          <h3>Price Appreciation</h3>
+          <p>Growing premium strength in the extended catchment.</p>
+        </article>
+        <article class="metric-card reveal" data-reveal="up" data-counter="350" data-prefix="INR " data-suffix="+ Lakh Cr">
+          <p class="metric-value">0</p>
+          <h3>Infra Investment</h3>
+          <p>Large-scale infrastructure strengthening the district.</p>
+        </article>
+        <article class="metric-card reveal" data-reveal="up" data-counter="60" data-suffix=" min">
+          <p class="metric-value">0</p>
+          <h3>Anywhere That Matters</h3>
+          <p>Perfectly central, with fast citywide movement.</p>
+        </article>
+      </div>
+
+      <div class="trend-panel reveal" data-reveal="up">
+        <div class="trend-copy">
+          <p class="eyebrow">Positioning</p>
+          <h3>A market reimagined by access, scarcity, and intent.</h3>
+          <p>
+            The district is shifting from under-recognized to undeniable, driven by improved infrastructure, central-city convenience, and a stronger luxury residential identity.
+          </p>
+        </div>
+        <div class="trend-chart">
+          <div class="chart-grid"></div>
+          <svg viewBox="0 0 560 300" class="chart-svg" aria-hidden="true">
+            <path id="chartPathA" d="M20 255 C90 245, 120 230, 170 190 S280 115, 330 115 S430 92, 540 50"></path>
+            <path id="chartPathB" d="M20 255 C90 248, 120 238, 170 203 S280 132, 330 125 S430 100, 540 60"></path>
+          </svg>
+          <div class="chart-labels">
+            <span>2021</span>
+            <span>2023</span>
+            <span>2025</span>
+            <span>2028</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="lifestyle-section" id="lifestyle">
+      <div class="section-sweep" aria-hidden="true"></div>
+      <div class="lifestyle-copy">
+        <div class="section-heading reveal" data-reveal="up">
+          <p class="eyebrow">A Holistic Way To Live</p>
+          <h2>Quiet power, crafted rhythm, and everyday composure.</h2>
+        </div>
+
+        <p class="lead reveal" data-reveal="up">
+          The experience should feel warm, confident, and deeply considered. That is the emotional core we are carrying from the brochure into the website.
+        </p>
+
+        <div class="principles-grid">
+          <article class="principle reveal" data-reveal="up">
+            <h3>Living In Balance</h3>
+            <p>Calm, measured spaces that slow the pace without losing the city.</p>
+          </article>
+          <article class="principle reveal" data-reveal="up">
+            <h3>Wellness As Ritual</h3>
+            <p>Daily renewal built into the way the district is experienced.</p>
+          </article>
+          <article class="principle reveal" data-reveal="up">
+            <h3>Connected, With Grace</h3>
+            <p>Proximity without chaos. Access without compromise.</p>
+          </article>
+          <article class="principle reveal" data-reveal="up">
+            <h3>Central, Yet Serene</h3>
+            <p>The heart of Mumbai with a more composed residential identity.</p>
+          </article>
+        </div>
+      </div>
+
+      <div class="lifestyle-visual">
+        <div class="portrait-card reveal" data-reveal="right">
+          <img src="assets/images/city-drone.jpg" alt="Skyline and district aerial view" class="img-city-drone" data-parallax="10">
+        </div>
+        <div class="small-card card-school reveal" data-reveal="left">
+          <img src="assets/images/school-life.jpg" alt="Students walking through an institutional campus" class="img-school">
+        </div>
+        <div class="small-card card-temple reveal" data-reveal="left">
+          <img src="assets/images/matunga-station.jpg" alt="Historic neighborhood landmark in Matunga" class="img-station">
+        </div>
+      </div>
+    </section>
+
+    <section class="highlights-section" id="highlights">
+      <div class="section-sweep" aria-hidden="true"></div>
+      <div class="highlight-media reveal" data-reveal="left">
+        <img src="assets/images/hero-family-towers.jpg" alt="Premium family lifestyle image at the project" class="img-hero-family" data-parallax="10">
+      </div>
+
+      <div class="highlight-copy">
+        <div class="section-heading reveal" data-reveal="up">
+          <p class="eyebrow">Project Highlights</p>
+          <h2>Perfectly positioned. Historically rooted.</h2>
+        </div>
+
+        <p class="lead reveal" data-reveal="up">
+          A future-facing landmark development that uses understated luxury, elegant planning, and skyline presence to elevate everyday living.
+        </p>
+
+        <div class="highlight-list">
+          <article class="highlight-item reveal" data-reveal="up">
+            <span>01</span>
+            <div>
+              <h3>4 Acre Integrated Township</h3>
+              <p>An ambitious mixed-use canvas shaped as a complete destination.</p>
+            </div>
+          </article>
+          <article class="highlight-item reveal" data-reveal="up">
+            <span>02</span>
+            <div>
+              <h3>39 &amp; 47 Storey Icons</h3>
+              <p>Distinctive vertical presence with a premium central-city address.</p>
+            </div>
+          </article>
+          <article class="highlight-item reveal" data-reveal="up">
+            <span>03</span>
+            <div>
+              <h3>2 &amp; 3 BHK Residences</h3>
+              <p>Designed for modern families, elevated views, and lasting value.</p>
+            </div>
+          </article>
+          <article class="highlight-item reveal" data-reveal="up">
+            <span>04</span>
+            <div>
+              <h3>Grand Clubhouse &amp; Sky Experiences</h3>
+              <p>Layered amenity programming across ground, podium, and upper levels.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="amenities-section" id="amenities">
+      <div class="section-sweep" aria-hidden="true"></div>
+      <div class="section-heading wide reveal" data-reveal="up">
+        <p class="eyebrow">Understated Luxury</p>
+        <h2>Spaces curated for wellness, celebration, and arrival.</h2>
+      </div>
+
+      <div class="amenity-collage">
+        <article class="amenity-card large reveal" data-reveal="up">
+          <img src="assets/images/pool-amenity.jpg" alt="Pool and landscape amenity" class="img-pool">
+          <div class="amenity-overlay">
+            <h3>Podium Wellness Deck</h3>
+            <p>Reflective water, soft landscaping, and resort-like calm.</p>
+          </div>
+        </article>
+        <article class="amenity-card reveal" data-reveal="up">
+          <img src="assets/images/view-window.jpg" alt="Luxury indoor amenity view" class="img-view-window">
+          <div class="amenity-overlay">
+            <h3>Sky Lounge Outlook</h3>
+            <p>Skyline-facing social spaces for quiet evenings and grand hosting.</p>
+          </div>
+        </article>
+        <article class="amenity-card reveal" data-reveal="up">
+          <img src="assets/images/school-life.jpg" alt="Children and family community lifestyle" class="img-school">
+          <div class="amenity-overlay">
+            <h3>Family-Centered Living</h3>
+            <p>A district built for the full rhythm of modern family life.</p>
+          </div>
+        </article>
+        <article class="amenity-card reveal" data-reveal="up">
+          <img src="assets/images/temple.jpg" alt="Cultural and spiritual landmark near the district" class="img-temple">
+          <div class="amenity-overlay">
+            <h3>Cultural Context</h3>
+            <p>Matunga's heritage gives the address depth and identity.</p>
+          </div>
+        </article>
+        <article class="amenity-card wide reveal" data-reveal="up">
+          <img src="assets/images/site-masterplan.jpg" alt="Masterplan aerial render of the development" class="img-masterplan">
+          <div class="amenity-overlay">
+            <h3>District-Scale Planning</h3>
+            <p>Built as a complete ecosystem, not a standalone tower cluster.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="showcase-rail">
+      <div class="section-heading wide reveal" data-reveal="up">
+        <p class="eyebrow">Cinematic Moments</p>
+        <h2>Every section should feel like a premium spread coming to life.</h2>
+      </div>
+
+      <div class="rail-track" id="railTrack">
+        <article class="rail-card">
+          <img src="assets/images/view-window.jpg" alt="Window view into premium city life" class="img-view-window">
+          <div class="rail-card-copy">
+            <p>Skyline Perspective</p>
+            <h3>Luxury that feels composed, never loud.</h3>
+          </div>
+        </article>
+        <article class="rail-card">
+          <img src="assets/images/pool-amenity.jpg" alt="Poolside and landscape amenity" class="img-pool">
+          <div class="rail-card-copy">
+            <p>Wellness Layer</p>
+            <h3>Resort calm woven into the everyday rhythm.</h3>
+          </div>
+        </article>
+        <article class="rail-card">
+          <img src="assets/images/atal-setu.jpg" alt="Atal Setu connectivity image" class="img-atal-setu">
+          <div class="rail-card-copy">
+            <p>Growth Layer</p>
+            <h3>Infrastructure momentum powering long-term value.</h3>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="location-section" id="location">
+      <div class="section-sweep" aria-hidden="true"></div>
+      <div class="section-heading wide reveal" data-reveal="up">
+        <p class="eyebrow">The Only Map Where Heritage Is Your North Star</p>
+        <h2>Thoughtfully positioned at the center of what truly matters.</h2>
+      </div>
+
+      <div class="location-stage">
+        <div class="map-frame reveal" data-reveal="scale">
+          <img src="assets/images/location-map.png" alt="Location map of Greater Matunga District" class="img-location-map" data-parallax="8">
+          <div class="map-pulse pulse-a"></div>
+          <div class="map-pulse pulse-b"></div>
+          <div class="map-pulse pulse-c"></div>
+        </div>
+
+        <div class="location-columns">
+          <div class="location-group reveal" data-reveal="up">
+            <h3>Leisure &amp; Entertainment</h3>
+            <ul>
+              <li><span>Five Gardens, Matunga</span><strong>10 min</strong></li>
+              <li><span>Shivaji Park</span><strong>15 min</strong></li>
+              <li><span>Phoenix Palladium</span><strong>20 min</strong></li>
+            </ul>
+          </div>
+          <div class="location-group reveal" data-reveal="up">
+            <h3>Commercial Hubs</h3>
+            <ul>
+              <li><span>BKC</span><strong>18 min</strong></li>
+              <li><span>Lower Parel</span><strong>20 min</strong></li>
+              <li><span>Andheri-Kurla Belt</span><strong>25 min</strong></li>
+            </ul>
+          </div>
+          <div class="location-group reveal" data-reveal="up">
+            <h3>Education</h3>
+            <ul>
+              <li><span>Don Bosco High School</span><strong>4 min</strong></li>
+              <li><span>Ruia College</span><strong>10 min</strong></li>
+              <li><span>ICT Matunga</span><strong>12 min</strong></li>
+            </ul>
+          </div>
+          <div class="location-group reveal" data-reveal="up">
+            <h3>Healthcare</h3>
+            <ul>
+              <li><span>Sion Hospital</span><strong>7 min</strong></li>
+              <li><span>Hinduja Hospital</span><strong>15 min</strong></li>
+              <li><span>Fortis S. L. Raheja</span><strong>15 min</strong></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="future-section" id="future">
+      <div class="section-sweep" aria-hidden="true"></div>
+      <div class="future-copy">
+        <div class="section-heading reveal" data-reveal="up">
+          <p class="eyebrow">A Future Of Connectivity</p>
+          <h2>The next chapter is being accelerated by infrastructure.</h2>
+        </div>
+        <p class="lead reveal" data-reveal="up">
+          The region is not standing still. It is being stitched into a larger metropolitan future, and that momentum becomes part of the district's long-term value story.
+        </p>
+      </div>
+
+      <div class="future-grid">
+        <article class="future-card reveal" data-reveal="up">
+          <img src="assets/images/atal-setu.jpg" alt="Atal Setu infrastructure image" class="img-atal-setu">
+          <h3>MTHL / Atal Setu</h3>
+        </article>
+        <article class="future-card reveal" data-reveal="up">
+          <img src="assets/images/city-drone.jpg" alt="Mumbai coastal infrastructure aerial image" class="img-city-drone">
+          <h3>Mumbai Coastal Road</h3>
+        </article>
+        <article class="future-card reveal" data-reveal="up">
+          <img src="assets/images/view-window.jpg" alt="Metro and future transit experience visual" class="img-view-window">
+          <h3>Metro-Driven Access</h3>
+        </article>
+        <article class="future-card reveal" data-reveal="up">
+          <img src="assets/images/matunga-aerial.jpg" alt="Expressway and urban connectivity image" class="img-aerial-main">
+          <h3>Regional Mobility</h3>
+        </article>
+      </div>
+    </section>
+
+    <section class="cta-section" id="cta">
+      <div class="section-sweep" aria-hidden="true"></div>
+      <div class="cta-visual reveal" data-reveal="left">
+        <img src="assets/images/hero-family-towers.jpg" alt="Final promotional image of the district and residents" class="img-hero-family">
+      </div>
+      <div class="cta-copy">
+        <img src="assets/images/crest-gold.png" alt="Greater Matunga District crest" class="cta-crest reveal" data-reveal="up">
+        <div class="section-heading reveal" data-reveal="up">
+          <p class="eyebrow">The Time To Rise Is Now</p>
+          <h2>Secure your place where legacy meets growth and value meets vision.</h2>
+        </div>
+        <p class="lead reveal" data-reveal="up">
+          Limited residences. Early advantage belongs to those who act with conviction.
+        </p>
+
+        <form class="cta-form reveal" data-reveal="up" id="enquiryForm">
+          <input type="text" id="nameField" placeholder="Your name" required>
+          <input type="email" id="emailField" placeholder="Email address" required>
+          <button type="submit" class="btn btn-solid magnetic">Request A Call Back</button>
+        </form>
+        <p class="form-message" id="formMessage"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div>
+      <img src="assets/images/crest-gold.png" alt="Greater Matunga District crest">
+      <p>Greater Matunga District</p>
+    </div>
+    <p>Crafted as an animated luxury presentation experience for central Mumbai living.</p>
+  </footer>
+
+  <script src="js/main.js" defer></script>
+</body>
+</html>
