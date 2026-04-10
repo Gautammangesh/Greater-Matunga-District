@@ -844,7 +844,7 @@ function initTimelineScrub() {
       },
       onLeave: () => {
         gsap.to(item, { autoAlpha: 0.3, duration: 0.4 });
-        gsap.to(number, { scale: 1, color: "rgba(255,255,255,0.3)", duration: 0.4 });
+        gsap.to(number, { scale: 1, color: "rgba(0,0,0,0.15)", duration: 0.4 });
       },
       onEnterBack: () => {
         gsap.to(item, { autoAlpha: 1, x: 0, duration: 0.8, ease: "power3.out" });
@@ -852,7 +852,7 @@ function initTimelineScrub() {
       },
       onLeaveBack: () => {
         gsap.to(item, { autoAlpha: 0.3, duration: 0.4 });
-        gsap.to(number, { scale: 1, color: "rgba(255,255,255,0.3)", duration: 0.4 });
+        gsap.to(number, { scale: 1, color: "rgba(0,0,0,0.15)", duration: 0.4 });
       }
     });
   });
@@ -1084,7 +1084,7 @@ function initUseCaseCards() {
           if (i === activeIndex) {
             gsap.to(num, { scale: 1.5, color: "#a86d2b", duration: 0.3 });
           } else {
-            gsap.to(num, { scale: 1, color: "rgba(255,255,255,0.3)", duration: 0.3 });
+            gsap.to(num, { scale: 1, color: "rgba(0,0,0,0.15)", duration: 0.3 });
           }
         });
         
@@ -1236,7 +1236,7 @@ function initHistorySection() {
           } else {
             gsap.to(num, { 
               scale: 1, 
-              color: "rgba(255,255,255,0.25)",
+              color: "rgba(0,0,0,0.12)",
               x: 0,
               duration: 0.4 
             });
@@ -1263,7 +1263,7 @@ function initHistorySection() {
           if (j === i) {
             gsap.to(num, { scale: 1.4, color: "#a86d2b", x: 20, duration: 0.4 });
           } else {
-            gsap.to(num, { scale: 1, color: "rgba(255,255,255,0.25)", x: 0, duration: 0.4 });
+            gsap.to(num, { scale: 1, color: "rgba(0,0,0,0.12)", x: 0, duration: 0.4 });
           }
         });
         gsap.to(item, { opacity: 1, x: 0, duration: 0.8, ease: "power3.out" });
