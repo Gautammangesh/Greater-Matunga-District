@@ -429,7 +429,19 @@ section {
   pointer-events: none;
 }
 
-.hero-copy,
+.hero-copy {
+  position: relative;
+  z-index: 5;
+  transform-origin: left bottom;
+  max-width: min(860px, 68vw);
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
 .highlight-copy,
 .future-copy {
   position: relative;
@@ -440,16 +452,16 @@ section {
 
 .hero-title {
   margin: 0 0 24px;
-  font-size: clamp(5rem, 11vw, 9.5rem);
-  line-height: 0.88;
-  letter-spacing: -0.04em;
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  line-height: 0.92;
+  letter-spacing: -0.03em;
   color: var(--ink);
   text-shadow: none;
 }
 
 .hero-title .gradient-text {
   display: block;
-  background: linear-gradient(135deg, var(--ink) 0%, var(--accent) 50%, var(--accent-soft) 100%);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-soft) 50%, var(--navy) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -541,22 +553,20 @@ section {
 /* Gold city decorative model at bottom of hero */
 .hero-city-model {
   position: absolute;
-  bottom: -5%;
+  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 120%;
+  width: 100%;
+  max-width: 1400px;
   z-index: 4;
   pointer-events: none;
-  /* screen blend: white bg disappears on dark surface, gold stands out */
-  mix-blend-mode: screen;
   opacity: 0; /* GSAP will animate this in */
 }
 
 .hero-city-img {
   width: 100%;
   display: block;
-  /* Shift hue so the gold reads warmer and more saturated */
-  filter: saturate(1.4) brightness(0.95);
+  filter: drop-shadow(0 20px 40px rgba(168, 109, 43, 0.15));
 }
 
 .hero-image-frame::after {
@@ -564,7 +574,7 @@ section {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(to top, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.4) 40%, rgba(255,255,255,0) 100%);
+    linear-gradient(to top, rgba(255,255,255,1) 0%, rgba(255,255,255,0.85) 25%, rgba(255,255,255,0.3) 60%, rgba(255,255,255,0) 100%);
 }
 
 .hero-image-frame img,
@@ -763,10 +773,8 @@ section {
 .intro-brand-panel {
   border-radius: var(--radius-xl);
   overflow: hidden;
-  box-shadow: var(--shadow);
-  background:
-    linear-gradient(180deg, rgba(11, 36, 77, 0.95), rgba(18, 46, 89, 0.95)),
-    url("../assets/images/blue-back.jpg") center/cover no-repeat;
+  box-shadow: var(--shadow-strong);
+  background: linear-gradient(135deg, #0b244d 0%, #122e59 50%, #1a3a6e 100%);
   color: #f4ede1;
 }
 
@@ -861,7 +869,7 @@ section {
   height: calc(100vh - 130px);
   border-radius: 20px;
   overflow: hidden;
-  background: var(--bg-soft);
+  background: #1a1a1a;
   border: 1px solid var(--line);
   box-shadow: var(--shadow-strong);
   transform-style: preserve-3d;
@@ -871,7 +879,7 @@ section {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(255,255,255,0.85) 0%, transparent 50%);
+  background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.3) 40%, transparent 100%);
   pointer-events: none;
   z-index: 2;
 }
@@ -911,7 +919,7 @@ section {
   position: absolute;
   inset: 0;
   z-index: 3;
-  color: var(--ink);
+  color: #fff;
 }
 
 .panel-index {
@@ -926,7 +934,7 @@ section {
   margin: 0 0 16px;
   font-size: clamp(2.8rem, 5vw, 5.5rem);
   line-height: 0.92;
-  color: var(--ink);
+  color: #fff;
 }
 
 .story-copy p:last-child {
@@ -934,7 +942,7 @@ section {
   max-width: 500px;
   font-size: 1rem;
   line-height: 1.85;
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .metrics-grid {
@@ -1789,11 +1797,17 @@ section {
 
 /* TheCube exact - Hero Stats Section */
 .hero-stats {
+  position: relative;
+  z-index: 6;
   display: flex;
-  gap: 60px;
-  margin-top: 60px;
-  padding-top: 40px;
-  border-top: 1px solid var(--line);
+  gap: 40px;
+  margin-top: 40px;
+  padding: 30px 40px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
 }
 
 .hero-stat {
@@ -1802,11 +1816,11 @@ section {
 
 .stat-number {
   font-family: "Cormorant Garamond", serif;
-  font-size: clamp(3rem, 8vw, 6rem);
-  font-weight: 300;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 500;
   line-height: 1;
-  color: var(--ink);
-  letter-spacing: -0.03em;
+  color: var(--accent);
+  letter-spacing: -0.02em;
 }
 
 .stat-label {
