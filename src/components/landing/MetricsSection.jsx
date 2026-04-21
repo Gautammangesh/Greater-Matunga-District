@@ -105,7 +105,7 @@ export default function MetricsSection() {
             viewport={{ once: false, amount: 0.3 }}
             transition={{ duration: 0.9, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
             whileHover={{ y: -8, boxShadow: "0 36px_90px rgba(20,20,20,0.18)" }}
-            className="p-6 md:p-7 rounded-[28px] border border-border bg-card/86 backdrop-blur-xl shadow-[0_30px_80px_rgba(20,20,20,0.12)] hover:-translate-y-2 hover:shadow-[0_36px_90px_rgba(20,20,20,0.16)] hover:border-primary/25 transition-all duration-500"
+            className="p-6 md:p-7 rounded-[28px] border border-border bg-card/86 backdrop-blur-xl shadow-[0_30px_80px_rgba(20,20,20,0.12)] hover:-translate-y-2 hover:shadow-[0_36px_90px_rgba(20,20,20,0.16)] hover:border-primary/25 transition-all duration-500 will-change-transform"
           >
             <AnimatedCounter target={m.target} prefix={m.prefix} suffix={m.suffix} />
             <h3 className="text-sm font-semibold mb-2">{m.title}</h3>

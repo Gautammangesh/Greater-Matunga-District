@@ -44,9 +44,13 @@ export default function StorySection() {
       const { top, height } = el.getBoundingClientRect();
       const scrollable = height - window.innerHeight;
       if (scrollable <= 0) return;
+      
+      // Calculate index based on scroll position
       const scrolled = Math.max(0, Math.min(scrollable, -top));
       const idx = Math.min(PANELS.length - 1, Math.floor((scrolled / scrollable) * PANELS.length));
-      setActiveIndex(idx);
+      
+      // ONLY update if index changed
+      setActiveIndex((current) => (current !== idx ? idx : current));
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
@@ -101,7 +105,7 @@ export default function StorySection() {
               {PANELS.map((panel, i) => (
                 <motion.div
                   key={`bg-${i}`}
-                  className="absolute inset-0"
+                  className="absolute inset-0 will-change-opacity"
                   animate={{
                     opacity: activeIndex === i ? 1 : 0,
                     scale: activeIndex === i ? 1 : 1.05,

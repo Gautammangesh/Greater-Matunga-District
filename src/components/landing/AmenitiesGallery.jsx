@@ -45,6 +45,7 @@ export default function AmenitiesGallery() {
                 filter: hasHover && !isHovered ? "grayscale(1) brightness(0.5)" : isHovered ? "grayscale(0) brightness(1)" : "grayscale(0.4) brightness(0.85)",
                 transition: "flex 0.8s cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)",
                 transformStyle: "preserve3d",
+                willChange: "flex, filter, transform",
               }}
               onMouseEnter={() => setHoveredIdx(i)}
               onMouseLeave={() => setHoveredIdx(null)}

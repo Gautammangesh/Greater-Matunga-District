@@ -126,10 +126,10 @@ export default function HeroSection() {
 
       {/* Hero Copy */}
       <motion.div
-        className="relative z-[5] max-w-[1280px] px-[5vw] pb-[8vh] md:pb-[12vh] w-full"
+        className="relative z-[5] max-w-[1280px] px-[5vw] pb-[8vh] md:pb-[12vh] w-full will-change-transform"
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, amount: 0.3 }}
+        viewport={{ once: false, amount: 0.15 }}
         transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
       >
         <motion.p
